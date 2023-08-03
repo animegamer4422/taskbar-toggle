@@ -18,6 +18,7 @@ namespace Taskbar {
             if (this->hasError()) return;
 
             this->_taskbar = new Taskbar();
+            this->_taskbar->hide();
         }
         ~App() {
             delete this->_settings;
@@ -69,7 +70,11 @@ namespace Taskbar {
         Settings* _settings = nullptr;
         Shortcut* _shortcutExit = nullptr;
         Shortcut* _shortcutToggle = nullptr;
+        Shortcut* _shortcutUnhideA = nullptr;
+        Shortcut* _shortcutUnhideX = nullptr;
+        Shortcut* _shortcutUnhideB = nullptr;
         Taskbar* _taskbar = nullptr;
+        
         Settings* _createSettings(std::string path) {
             auto settings = new Settings(path);
 
@@ -89,11 +94,19 @@ namespace Taskbar {
 
             return shortcut;
         }
+
         void _onFrame() {
             if (this->_shortcutExit->isActive()) return this->stop();
 
             if (this->_shortcutToggle->isActive()) {
                 this->_taskbar->toggle();
+                Sleep(300);
+                return;
+            }
+
+            // Check for the new shortcuts and show the taskbar if any of them are triggered
+            if (this->_shortcutUnhideA->isActive() || this->_shortcutUnhideX->isActive() || this->_shortcutUnhideB->isActive()) {
+                this->_taskbar->show();
                 Sleep(300);
                 return;
             }
@@ -104,3 +117,4 @@ namespace Taskbar {
         }
     };
 }
+
