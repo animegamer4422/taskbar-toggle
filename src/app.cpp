@@ -17,6 +17,15 @@ namespace Taskbar {
             this->_shortcutToggle = this->_createShortcut("toggle");
             if (this->hasError()) return;
 
+            this->_shortcutUnhideA = this->_createShortcut("unhide-a");
+            if (this->hasError()) return;
+
+            this->_shortcutUnhideX = this->_createShortcut("unhide-x");
+            if (this->hasError()) return;
+
+            this->_shortcutUnhideB = this->_createShortcut("unhide-b");
+            if (this->hasError()) return;
+
             this->_taskbar = new Taskbar();
             this->_taskbar->hide();
         }
@@ -25,6 +34,9 @@ namespace Taskbar {
             delete this->_shortcutExit;
             delete this->_shortcutToggle;
             delete this->_taskbar;
+            delete this->_shortcutUnhideA;
+            delete this->_shortcutUnhideX;
+            delete this->_shortcutUnhideB;
         }
         bool hasError() {
             return this->_status.error;
@@ -100,14 +112,15 @@ namespace Taskbar {
 
             if (this->_shortcutToggle->isActive()) {
                 this->_taskbar->toggle();
-                Sleep(300);
+                Sleep(30);
                 return;
             }
 
             // Check for the new shortcuts and show the taskbar if any of them are triggered
             if (this->_shortcutUnhideA->isActive() || this->_shortcutUnhideX->isActive() || this->_shortcutUnhideB->isActive()) {
-                this->_taskbar->show();
-                Sleep(300);
+                this->_taskbar->toggle();
+                Sleep(30);
+                this->_taskbar->toggle();
                 return;
             }
 
@@ -117,4 +130,3 @@ namespace Taskbar {
         }
     };
 }
-
