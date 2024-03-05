@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "status.cpp"
+#include <cstdlib>
 
 namespace Taskbar {
     typedef std::unordered_map<std::string, std::string> t_section;
@@ -15,13 +16,14 @@ namespace Taskbar {
     public:
         Settings(std::string path) {
             std::ifstream infile(path.c_str());
+            std::string settingsPath = std::string(getenv("USERPROFILE")) + "\\AppData\\Local\\taskbar-toggle\\settings.ini";
 
             if (infile) {
                 if (!this->_parseSettings(infile)) {
-                    this->_status.setError("Incorrect file format: settings.ini");
+                    this->_status.setError("Incorrect file format: " + settingsPath);
                 }
             } else {
-                this->_status.setError("File not found: settings.ini");
+                this->_status.setError("File not found: " + settingsPath);
             }
 
             infile.close();

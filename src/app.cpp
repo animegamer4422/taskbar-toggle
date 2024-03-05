@@ -1,5 +1,5 @@
 #pragma once
-
+#include <cstdlib> // For getenv
 #include "settings.cpp"
 #include "shortcut.cpp"
 #include "taskbar.cpp"
@@ -7,28 +7,32 @@
 namespace Taskbar {
     class App {
     public:
-        App() {
-            this->_settings = this->_createSettings(".\\settings.ini");
-            if (this->hasError()) return;
+App() {
+    // Construct the settings file path using the USERPROFILE environment variable
+    std::string settingsPath = std::string(getenv("USERPROFILE")) + "\\AppData\\Local\\taskbar-toggle\\settings.ini";
 
-            this->_shortcutExit = this->_createShortcut("exit");
-            if (this->hasError()) return;
+    this->_settings = this->_createSettings(settingsPath);
+    if (this->hasError()) return;
 
-            this->_shortcutToggle = this->_createShortcut("toggle");
-            if (this->hasError()) return;
+    this->_shortcutExit = this->_createShortcut("exit");
+    if (this->hasError()) return;
 
-            this->_shortcutUnhideA = this->_createShortcut("unhide-a");
-            if (this->hasError()) return;
+    this->_shortcutToggle = this->_createShortcut("toggle");
+    if (this->hasError()) return;
 
-            this->_shortcutUnhideX = this->_createShortcut("unhide-x");
-            if (this->hasError()) return;
+    this->_shortcutUnhideA = this->_createShortcut("unhide-a");
+    if (this->hasError()) return;
 
-            this->_shortcutUnhideB = this->_createShortcut("unhide-b");
-            if (this->hasError()) return;
+    this->_shortcutUnhideX = this->_createShortcut("unhide-x");
+    if (this->hasError()) return;
 
-            this->_taskbar = new Taskbar();
-            this->_taskbar->hide();
-        }
+    this->_shortcutUnhideB = this->_createShortcut("unhide-b");
+    if (this->hasError()) return;
+
+    this->_taskbar = new Taskbar();
+    this->_taskbar->hide();
+}
+
         ~App() {
             delete this->_settings;
             delete this->_shortcutExit;
